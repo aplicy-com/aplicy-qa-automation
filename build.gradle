@@ -1,7 +1,8 @@
 plugins {
 	id 'java'
-	id 'org.springframework.boot' version '3.3.3'
-	id 'io.spring.dependency-management' version '1.1.6'
+	id 'org.springframework.boot' version '3.2.2'
+	id 'io.spring.dependency-management' version '1.1.4'
+	id 'io.qameta.allure' version '2.11.2'
 }
 
 group = 'com.aplicy.qa.automation'
@@ -17,24 +18,50 @@ repositories {
 	mavenCentral()
 }
 
+ext {
+	allureVersion = '2.24.0'
+	seleniumVersion = '4.16.1'
+}
+
 dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
-	implementation 'org.seleniumhq.selenium:selenium-java:4.24.0'
-	testImplementation 'io.qameta.allure:allure-selenide:2.13.9'
-	testImplementation 'io.qameta.allure:allure-junit5:2.13.9'
+
+	implementation "org.seleniumhq.selenium:selenium-java:${seleniumVersion}"
+
+	testImplementation "io.qameta.allure:allure-selenide:${allureVersion}"
+	testImplementation "io.qameta.allure:allure-junit5:${allureVersion}"
+
+	// Additional useful dependencies
+	testImplementation 'org.assertj:assertj-core:3.24.2'
+	testImplementation 'com.codeborne:selenide:7.0.2'
+}
+
+allure {
+	version.set(allureVersion)
+	adapter {
+		aspectjWeaver.set(true)
+		frameworks {
+			junit5 {
+				enabled.set(true)
+			}
+		}
+	}
 }
 
 tasks.named('test') {
 	useJUnitPlatform()
-	reports {
-		junitXml {
-			required.set(true)  // Enable JUnit XML reports
-		}
-		html {
-			required.set(false) // Disable HTML reports
-		}
+	systemProperty('allure.results.directory', 'build/allure-results')
+
+	testLogging {
+		events "passed", "skipped", "failed"
 	}
+
+	finalizedBy('allureReport')
+}
+
+tasks.named('allureReport') {
+	dependsOn('test')
 }
 
 tasks.named('build') {
