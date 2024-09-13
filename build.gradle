@@ -1,0 +1,42 @@
+plugins {
+	id 'java'
+	id 'org.springframework.boot' version '3.3.3'
+	id 'io.spring.dependency-management' version '1.1.6'
+}
+
+group = 'com.aplicy.qa.automation'
+version = '0.0.1-SNAPSHOT'
+
+java {
+	toolchain {
+		languageVersion = JavaLanguageVersion.of(21)
+	}
+}
+
+repositories {
+	mavenCentral()
+}
+
+dependencies {
+	implementation 'org.springframework.boot:spring-boot-starter'
+	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+	implementation 'org.seleniumhq.selenium:selenium-java:4.24.0'
+	testImplementation 'io.qameta.allure:allure-selenide:2.13.9'
+	testImplementation 'io.qameta.allure:allure-junit5:2.13.9'
+}
+
+tasks.named('test') {
+	useJUnitPlatform()
+	reports {
+		junitXml {
+			required.set(true)  // Enable JUnit XML reports
+		}
+		html {
+			required.set(false) // Disable HTML reports
+		}
+	}
+}
+
+tasks.named('build') {
+	dependsOn test
+}
