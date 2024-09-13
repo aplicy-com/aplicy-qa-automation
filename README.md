@@ -1,0 +1,1 @@
+# aplicy-qa-automation
