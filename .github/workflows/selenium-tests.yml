@@ -20,10 +20,10 @@ jobs:
         uses: actions/setup-java@v3
         with:
           java-version: '21'
-          distribution: 'temurin'  # Specify the JDK distribution here
+          distribution: 'temurin'  # Specify the JDK distribution
 
       - name: Set up ChromeDriver
-        uses: nanasess/setup-chromedriver@v1
+        uses: SeleniumHQ/setup-chromedriver@v1
 
       - name: Build with Gradle and Run Tests
         run: ./gradlew clean test
