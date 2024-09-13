@@ -20,13 +20,20 @@ jobs:
         uses: actions/setup-java@v3
         with:
           java-version: '21'
-          distribution: 'temurin'  # Specify the JDK distribution
+          distribution: 'temurin'
 
-      - name: Set up ChromeDriver
-        uses: SeleniumHQ/setup-chromedriver@v1
+      - name: Setup Chrome
+        uses: browser-actions/setup-chrome@latest
+
+      - name: Setup ChromeDriver
+        uses: nanasess/setup-chromedriver@v2
 
       - name: Build with Gradle and Run Tests
-        run: ./gradlew clean test
+        run: |
+          export DISPLAY=:99
+          chromedriver --url-base=/wd/hub &
+          sudo Xvfb -ac :99 -screen 0 1280x1024x24 > /dev/null 2>&1 &
+          ./gradlew clean test
 
       - name: Upload Test Report
         uses: actions/upload-artifact@v3
