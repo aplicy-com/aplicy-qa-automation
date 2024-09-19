@@ -16,8 +16,11 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
+import org.springframework.boot.test.context.SpringBootTest;
 
 /** Tests for the Contact page of CanadaWanderlust. */
+@SpringBootTest
+@DisplayName("Tests for the Contact page of CanadaWanderlust.")
 class CWContactPageTest {
   WebDriver driver;
   String mainUrl = "https://www.canadawanderlust.com";
